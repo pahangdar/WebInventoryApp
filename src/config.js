@@ -1,5 +1,5 @@
 const config = {
-    backendUrl: 'http://localhost/inventory/'
+    backendUrl: 'https://triosdevelopers.com/~S.Pahangdar/webinventory/'
   };
   
   export default config;
