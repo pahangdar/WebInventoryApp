@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-//import { Link } from 'react-router-dom'; // Using React Router's Link
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NavBar = ({ handleShowLogin, handleLogout }) => {
@@ -21,9 +21,9 @@ const NavBar = ({ handleShowLogin, handleLogout }) => {
             <Nav.Link href="/objects/-100">Manage Users</Nav.Link>
 
             <NavDropdown title="Setup" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="/setup/objecttypies">Object Types</NavDropdown.Item>
-              <NavDropdown.Item href="/setup/properties">Properties</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Property Sets</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/setup/tables/objecttypes">Object Types</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/setup/tables/properties">Properties</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/setup/tables/propertysets">Property Sets</NavDropdown.Item>
               <NavDropdown.Divider />
             </NavDropdown>
             </>

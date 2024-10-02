@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import MainPage from './pages/main/MainPage';
@@ -6,8 +7,8 @@ import ObjectsList from './pages/object/ObjectsList';
 import SetupPage from './pages/setup/SetupPage';
 import NavBar from './components/Navbar';
 import LoginModal from './components/LoginModal';
-import ObjectTypesList from './pages/setup/objectType/ObjectTypesList';
-import PropertiesList from './pages/setup/property/PropertiesList';
+import TableList from './pages/setup/TableList';
+import tablesConfig from './pages/setup/tablesConfig';
 
 const App = () => {
   // Initialize the authenticated state
@@ -46,8 +47,10 @@ const App = () => {
           <Route path="/" element={isAuthenticated ? <MainPage /> : <Navigate to="/login" />} />
           <Route path="/objects/:typeid/:parentid?" element={isAuthenticated ? <ObjectsList /> : <Navigate to="/login" />} />
           <Route path="/setup" element={isAuthenticated && userRole === "admin" ? <SetupPage /> : <Navigate to="/" />} />
-          <Route path="/setup/objecttypies" element={isAuthenticated && userRole === "admin" ? <ObjectTypesList /> : <Navigate to="/" />} />
-          <Route path="/setup/properties" element={isAuthenticated && userRole === "admin" ? <PropertiesList /> : <Navigate to="/" />} />
+          <Route
+            path="/setup/tables/:tableKey"
+            element={isAuthenticated && userRole === 'admin' ? <TableListWithConfig /> : <Navigate to="/" />}
+          />
           <Route path="/login" element={<LoginModal show={showLogin} handleClose={handleCloseLogin} onLoginSuccess={handleLoginSuccess} />} />
           {/* Add a catch-all route for 404 */}
           <Route path="*" element={<Navigate to="/" />} />
@@ -55,6 +58,18 @@ const App = () => {
       </Container>
     </Router>
   );
+};
+
+const TableListWithConfig = () => {
+  const { tableKey } = useParams(); // Get the tableKey from the URL
+  const tableConfig = tablesConfig[tableKey]; // Retrieve the corresponding config from TablesConfig.js
+
+  // return <div>Table configuration not found</div>;
+  if (!tableConfig) {
+    return <div>Table configuration not found</div>;
+  }
+
+  return <TableList tableConfig={tableConfig} />; // Pass the config to TableList component
 };
 
 export default App;
