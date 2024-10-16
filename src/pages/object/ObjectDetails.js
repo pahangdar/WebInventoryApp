@@ -6,6 +6,7 @@ import { Tabs, Tab, Card, Button } from 'react-bootstrap';
 import ObjectsList from './ObjectsList';
 import ObjectProperties from './ObjectProperties';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { parseInlineJsCss } from '../../utils/cssUtils';
 
 const ObjectDetails = ({ object, onClose, startEdit = false }) => {
   const [childTypes, setChildTypes] = useState([]);
@@ -117,8 +118,10 @@ const ObjectDetails = ({ object, onClose, startEdit = false }) => {
     setShowConfirmationModal(false);
   };
 
+  const inlineStyles = object.cssStyles ? parseInlineJsCss(object.cssStyles) : {};
+
   return (
-    <Card>
+    <Card style={inlineStyles}>
       <Card.Header as="h5">({object.typeName}) {object.name}'s Details
         <Button variant="outline-dark" size="sm" style={{ float: 'right' }} onClick={handleCloseClick}>
           &times;

@@ -8,6 +8,8 @@ import AlertPopup from '../../components/AlertPopup';
 import ConfirmationModal  from '../../components/ConfirmationModal';
 import ObjectDetails from './ObjectDetails';
 import AddEditObjectModal from './AddEditObjectModal';
+import { parseInlineJsCss } from '../../utils/cssUtils';
+
 
 const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = true }) => {
   
@@ -27,6 +29,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
   
   const [objects, setObjects] = useState([]);
   const [typeName, setTypename] = useState('');
+  const [typeCssStyles, setTypeCssStyles] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedObjectId, setSelectedObjectId] = useState(null);
@@ -43,7 +46,6 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
   const [selectedObject, setSelectedObject] = useState(null);
   // for ObjectDetails param
   const [detailsEditable, setDetailsEditable] = useState(false);
-
 
   const fetchObjects = async () => {
     setLoading(true);
@@ -80,8 +82,10 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
       const data2 = await response2.json();
       if (data2.length > 0) {
         setTypename(data2[0].typeName);
+        setTypeCssStyles(data2[0].cssStyles);
       } else {
         setTypename('Unknown Object');
+        setTypeCssStyles('');
       }
 
       const response3 = await fetch(`${config.backendUrl}objectGetObjectPrentTypes.php?typeId=${typeid}`, {
@@ -188,7 +192,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
         setShowPopup(true);
       }
     } catch (error) {
-      console.error('Error saving object:', error);
+      //console.error('Error saving object:', error);
       setPopupData({
         message: "An error occurred while saving the object.",
         bg: "danger"
@@ -288,7 +292,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
     return <ShowMessage heading={error} />;
   }
 
-  
+  const inlineStyles = typeCssStyles ? parseInlineJsCss(typeCssStyles) : {};
   return (
     <>
     <Container>
@@ -311,15 +315,16 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
           )}
         </Col>
       </Row>
+      { objects.length > 0 && (
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>{objects.length > 0 ? `${objects[0].typeName} Name` : 'Name'}</th>
-            <th>Type</th>
-            <th>Parent</th>
-            <th>Child</th>
-            <th></th>
+            <th style={inlineStyles}>Id</th>
+            <th style={inlineStyles}>{objects.length > 0 ? `${objects[0].typeName} Name` : 'Name'}</th>
+            <th style={inlineStyles}>Type</th>
+            <th style={inlineStyles}>Parent</th>
+            <th style={inlineStyles}>Child</th>
+            <th style={inlineStyles}></th>
           </tr>
         </thead>
         <tbody>
@@ -351,6 +356,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
           ))}
         </tbody>
       </Table>
+      )}
     </Container>
     
     {showModal && (<AddEditObjectModal

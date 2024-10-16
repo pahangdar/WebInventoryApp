@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
+import { parseInlineJsCss } from '../../utils/cssUtils';
 
-const ObjectTypeCard = ({ typeid, name, count }) => {
+const ObjectTypeCard = ({ typeid, name, count, cssStyles }) => {
+  
+  const inlineStyles = cssStyles ? parseInlineJsCss(cssStyles) : {};
+
   return (
     <Link to={`/objects/${typeid}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <Card style={{ margin: '.1rem' }}>
+      <Card style={inlineStyles}>
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>

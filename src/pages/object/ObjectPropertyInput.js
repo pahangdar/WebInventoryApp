@@ -1,9 +1,10 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect, forwardRef   } from 'react';
 import { Form, InputGroup, Button, Row, Col, Image } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaTrash } from 'react-icons/fa'; // For visibility toggle icons
 import config from '../../config';
+import { parseInlineCss } from '../../utils/cssUtils';
 
-const ObjectPropertyInput = ({
+const ObjectPropertyInput = forwardRef(({
   id,
   name,
   type,
@@ -15,7 +16,8 @@ const ObjectPropertyInput = ({
   deleteImage, // Function to handle image deletion
   onSave, // New prop for handling save
   onCancel, // New prop for handling save
-}) => {
+  cssStyles,
+}, ref) => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const inputValue = formValues[id] ?? ''; 
   const options = values_list
@@ -103,14 +105,18 @@ const ObjectPropertyInput = ({
     setDeletedImages([]);
   };
 
+  const inlineStyles = cssStyles ? parseInlineCss(cssStyles) : {};
+
   return (
     <Form.Group controlId={`property-${id}`} className="mb-3">
       <Form.Label>{name}</Form.Label>
       {options.length > 0 ? (
         <Form.Select
+          ref={ref}
           value={inputValue}
           onChange={(e) => handleInputChange(id, e.target.value)}
           disabled={!editable}
+          style={inlineStyles}
           aria-label={`Select ${name}`}
         >
           <option value="" disabled>
@@ -126,9 +132,11 @@ const ObjectPropertyInput = ({
         <>
           <Form.Control
             type="file"
+            ref={ref}
             multiple
             onChange={handleFileSelect}
             disabled={!editable}
+            style={inlineStyles}
           />
           <Row className="mt-2">
             {images.map((imagePath, index) => (
@@ -154,12 +162,13 @@ const ObjectPropertyInput = ({
         // Handle password type with a toggle
         <InputGroup>
           <Form.Control
-            
             type={showPassword ? 'text' : getInputType(type)}
+            ref={ref}
             value={inputValue}
             onChange={(e) => handleInputChange(id, e.target.value)}
             disabled={!editable}
             placeholder={editable ? `Enter ${name}` : ''}
+            style={inlineStyles}
           />
           {String(type) === '5' && (
             <InputGroup.Text onClick={togglePasswordVisibility}>
@@ -170,7 +179,7 @@ const ObjectPropertyInput = ({
       )}
     </Form.Group>
   );
-};
+});
 
 // Helper function to map type codes to input types
 const getInputType = (type) => {

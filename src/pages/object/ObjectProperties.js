@@ -21,6 +21,14 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
   const [popupData, setPopupData] = useState({});
 
   const saveFunctions = useRef([]); // Track save functions for each ObjectPropertyInput
+  const firstInputRef = useRef(null); // Ref for the first input
+
+  // Focus the first input when edit mode is enabled
+  useEffect(() => {
+    if (editMode && firstInputRef.current) {
+      firstInputRef.current.focus(); // Focus the first input field
+    }
+  }, [editMode]);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -230,9 +238,10 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
             )}
           </Col>
         </Row>
-        {details.map(({ id, name, values_list, type }, index) => (
+        {details.map(({ id, name, values_list, type, cssStyles }, index) => (
           <ObjectPropertyInput
             key={id}
+            ref={index === 0 ? firstInputRef : null} // Attach the ref to the first input
             id={id}
             name={name}
             type={type}
@@ -243,6 +252,7 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
             uploadImage={uploadImage}
             deleteImage={deleteImage}
             onSave={(saveFunc) => saveFunctions.current.push(saveFunc)} // Collect save functions
+            cssStyles={cssStyles}
           />
         ))}
       </Form>
