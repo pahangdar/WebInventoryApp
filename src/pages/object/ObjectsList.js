@@ -25,6 +25,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
   // Determine if we're in URL mode
   const isFromUrl = !!urlTypeId;
 
+  const userRole = localStorage.getItem('role');
   const navigate = useNavigate(); // Get navigate function
   
   const [objects, setObjects] = useState([]);
@@ -301,15 +302,17 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
           <Col>
             <h3>{typeName} ({objects.length})</h3>
           </Col>
-        )}
+        )}        
         <Col className="text-end">
-          <Button
-            variant={isFromUrl && showAsPage ? "primary" : "outline-dark"}
-            size   ={isFromUrl && showAsPage ? "" : "sm"}
-            onClick={handleAddButtonClick}
-          >
-            Add New {typeName}
-          </Button>
+          {userRole !== "user" && (
+            <Button
+              variant={isFromUrl && showAsPage ? "primary" : "outline-dark"}
+              size   ={isFromUrl && showAsPage ? "" : "sm"}
+              onClick={handleAddButtonClick}
+            >
+              Add New {typeName}
+            </Button>
+          )}
           {isFromUrl && showAsPage && ( 
             <Button variant="dark" className='ms-3' onClick={handleBackButtonClick}>Back</Button>
           )}
@@ -337,7 +340,7 @@ const ObjectsList = ({ typeid: propTypeId, parentid: propParentId, showAsPage = 
                 <td>{object.parent_id ? `(${object.parentTypeName}) ${object.parentName}` : ''}</td>
                 <td>{object.childCount}</td>
                 <td style={{ width: '60px' }} onClick={(e) => e.stopPropagation()}>
-                  {selectedObjectId === null && (
+                  {selectedObjectId === null && userRole !== 'user' && (
                   <DropdownButton id="dropdown-basic-button" title="..." variant="outline-dark" size='sm'>
                     <Dropdown.Item onClick={() => handleEditButtonClick(object)}>Edit</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleDeleteClick(object)}>Delete</Dropdown.Item>

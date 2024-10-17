@@ -62,14 +62,15 @@ const MainPage = () => {
           </Col> */}
         </Row>
         <Row xs={1} md={4} className="g-4">
-          {objectTypes.map(({ typeId, typeName, count, cssStyles }) => (
+          {objectTypes.map(({ typeId, typeName, count, cssStyles, countTitle }) => (
             <Col key={typeId} md={4}>
               <ObjectTypeCard
                 key={typeId}
                 typeid={typeId}
                 name={typeName}
                 count={count}
-                cssStyles={cssStyles} 
+                cssStyles={cssStyles}
+                countTitle={countTitle} 
               />
             </Col>
           ))}

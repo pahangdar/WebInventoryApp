@@ -11,7 +11,7 @@ const NavBar = ({ handleShowLogin, handleLogout }) => {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
       <Container>
-        <Navbar.Brand href="/">Inventory App</Navbar.Brand>
+        <Navbar.Brand href="/">Delivery Tracking App</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">

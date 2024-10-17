@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AlertPopup from './AlertPopup';
 import config from '../config';
 
@@ -8,10 +8,22 @@ const LoginModal = ({ show, handleClose, onLoginSuccess  }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     // for Popup Alert param
     const [showPopup, setShowPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
+
+    // Parse query parameters from the URL
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const emailParam = queryParams.get('email');
+        const passwordParam = queryParams.get('password');
+        console.log('emailParam', emailParam);
+        console.log('passwordParam', passwordParam);
+        if (emailParam) setEmail(emailParam); // Set email if it's in the URL
+        if (passwordParam) setPassword(passwordParam); // Set password if it's in the URL
+    }, [location.search]); // This effect runs when the location changes
 
     const handleLogin = async (e) => {
         e.preventDefault();

@@ -23,6 +23,8 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
   const saveFunctions = useRef([]); // Track save functions for each ObjectPropertyInput
   const firstInputRef = useRef(null); // Ref for the first input
 
+  const userRole = localStorage.getItem('role');
+
   // Focus the first input when edit mode is enabled
   useEffect(() => {
     if (editMode && firstInputRef.current) {
@@ -212,7 +214,7 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
             </Col>
           )}
           <Col className="text-end">
-            {editable && !editMode && (
+            {editable && !editMode && userRole !== 'user' && (
               <Button
                 onClick={handleEditToggle}
                 variant={showTitle ? "primary" : "outline-dark"}
@@ -221,7 +223,7 @@ const ObjectProperties = ({ objectId, setId, editable = false, showTitle = false
                 Edit {setName}
               </Button>
             )}
-            {editable && editMode && (
+            {editable && editMode && userRole !== 'user' && (
               <>
                 <Button
                   onClick={handleSave}

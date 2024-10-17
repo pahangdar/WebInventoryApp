@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { parseInlineJsCss } from '../../utils/cssUtils';
 
-const ObjectTypeCard = ({ typeid, name, count, cssStyles }) => {
+const ObjectTypeCard = ({ typeid, name, count, cssStyles, countTitle }) => {
   
   const inlineStyles = cssStyles ? parseInlineJsCss(cssStyles) : {};
 
@@ -13,7 +13,7 @@ const ObjectTypeCard = ({ typeid, name, count, cssStyles }) => {
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>
-            Count: {count}
+            Count: {count} {countTitle}
           </Card.Text>
         </Card.Body>
       </Card>
